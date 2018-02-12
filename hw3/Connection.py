@@ -1,38 +1,12 @@
-import json
-import os
-import socket
-import threading
-import time
-import util
-from boltons import socketutils
-from communication import command
-
-_LOG = util.get_logger()
-
-
-class MessageQueue:
-    def __init__(self):
-        self._lock = threading.Lock()
-        self._messages = []
-
-    def put_message(self, msg):
-        with self._lock:
-            self._messages.append(msg)
-
-    def get_messages(self):
-        msgs = []
-        with self._lock:
-            while self._messages:
-                msgs.append(self._messages.pop(0))
-
-        return msgs
-
+# Responsible for establishing a connection to Dronology GCS_Middleware
+import messages
 
 class Connection:
-    _WAITING = 1
+    _WAITING = 1  
     _CONNECTED = 2
     _DEAD = -1
 
+    # Port 1234 is hardcoded into Dronology???
     def __init__(self, msg_queue, addr='', port=1234, g_id='default_groundstation'):
         self._g_id = g_id
         self._msgs = msg_queue
@@ -45,7 +19,7 @@ class Connection:
         self._msg_buffer = ''
 
     def get_status(self):
-        with self._status_lock:
+        with self._status_lock: # Only return status when it isn't being changed.
             return self._status
 
     def set_status(self, status):
@@ -56,25 +30,13 @@ class Connection:
         return self.get_status() == Connection._CONNECTED
 
     def start(self):
-        """
-        Start the connection
-        :return:
-        """
         threading.Thread(target=self._work).start()
 
     def stop(self):
-        """
-        Shutdown the connection.
-        :return:
-        """
         self.set_status(Connection._DEAD)
 
+    # Attempts to send a message (
     def send(self, msg):
-        """
-        Send a message to Dronology.
-        :param msg: the message to be sent over the socket (string)
-        :return: True if the message was able to be sent else False
-        """
         success = False
         with self._conn_lock:
             if self._status == Connection._CONNECTED:
@@ -88,15 +50,9 @@ class Connection:
         return success
 
     def get_messages(self, vid):
-        """
-        Get all the messages for a specific vehicle.
-        :param vid:
-        :return:
-        """
-        # TODO: is this deprecated?
         return self._msgs.get_messages(vid)
 
-    def _work(self):
+    def _work(self):  #Main method for connections
         """
         Main loop.
             1. Wait for a connection
@@ -117,19 +73,17 @@ class Connection:
                     sock = socket.create_connection((self._addr, self._port), timeout=5.0)
                     self._sock = socketutils.BufferedSocket(sock)
                     handshake = json.dumps({'type': 'connect', 'uavid': self._g_id})
-                    self._sock.send(handshake)
+                    self._sock.send(handshake) #Sends the JSON message
                     self._sock.send(os.linesep)
-                    self.set_status(Connection._CONNECTED)
+                    self.set_status(Connection._CONNECTED)  # No exception occurred, so its connected
                 except socket.error as e:
                     _LOG.info('Socket error ({})'.format(e))
                     time.sleep(10.0)
-            else:
+            else: #_CONNECTED
                 # Receive messages
                 try:
                     msg = self._sock.recv_until(os.linesep, timeout=0.1)
-                    cmd = command.CommandFactory.get_command(msg)
-                    if isinstance(cmd, command.Command):
-                        self._msgs.put_message(cmd)
+                    self._msgs.put_message(cmd)  
                 except socket.timeout:
                     pass
                 except socket.error as e:
