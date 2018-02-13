@@ -1,4 +1,5 @@
 import threading
+import os
 import dronekit
 import dronekit_sitl
 from pymavlink import mavutil
@@ -20,11 +21,11 @@ class Copter:
                     time.sleep(2.0)
 
             self.vehicle.armed = armed
-            if self.drone[vehicle_type] == 'PHYS':
+            if self.drone['vehicle_type'] == 'PHYS':
                 time.sleep(2.0)
-            while self._vehicle.armed != armed:
-                self._vehicle.armed = armed
-                if self.drone[vehicle_type] == 'PHYS':
+            while self.vehicle.armed != armed:
+                self.vehicle.armed = armed
+                if self.drone['vehicle_type'] == 'PHYS':
                     time.sleep(2.0)
         
     def set_groundspeed(self, groundspeed):
@@ -40,7 +41,7 @@ class Copter:
         
     def set_mode(self, mode):
         self.vehicle.mode = dronekit.VehicleMode(mode)
-        if self.drone[vehicle_type] == 'PHYS':
+        if self.drone['vehicle_type'] == 'PHYS':
             time.sleep(5.0)
         check_mode = self.vehicle.mode.name
 
@@ -110,11 +111,12 @@ class Copter:
 
         if status >= 0:
             message = {}
-            message = {"type": "handshake", "uavid": drone[vehicle_id], "sendtimestamp": long(round(time.time() * 1000)) }
-            message[data] = {"home": home}
+            message = {"type": "handshake", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
+            message['data'] = {"home": home}
+            self.to_dronology.put_message(message)
             
-            message = {"type": "state", "uavid": drone[vehicle_id], "sendtimestamp": long(round(time.time() * 1000)) }
-            message[data] = {"location": {
+            message = {"type": "state", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
+            message['data'] = {"location": {
                 "x": vehicle.location.global_relative_frame.lat,
                 "y": vehicle.location.global_relative_frame.lon,
                 "z": vehicle.location.global_relative_frame.alt
