@@ -17,9 +17,14 @@ class Everything:
         self.from_dronology = messages.Messages()
         self.to_dronology = messages.Messages()
         
-        
-        
     def start(self):
+        threading.Thread(target=self.start_thread).start()
+        
+    def wait(self):
+        while true:
+            time.sleep(3)
+        
+    def start_thread(self):
         self.connection = Connection.Connection(self.from_dronology, addr=self.addr, port=self.port, g_id=self.id)
         self.controlstation = controlstation.ControlStation(self.from_dronology, self.to_dronology, self.connection, self.drone)
         self.connection.start()

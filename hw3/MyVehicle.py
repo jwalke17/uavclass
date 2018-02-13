@@ -118,7 +118,8 @@ class Copter:
             message['sendtimestamp'] = long(round(time.time() * 1000))
             message['data'] = {}
             message['data']['home'] = home
-            self.to_dronology.put_message(json.dumps(message))
+            print(message)
+            self.to_dronology.put_message(str(message))
             
         else:
             print("Error: connect_vehicle1")
@@ -149,6 +150,6 @@ class Copter:
         return message
     
     def send_state_message(self):
-        self.to_dronology.put_message(json.dumps(self.create_state_message()))
+        self.to_dronology.put_message(str(self.create_state_message()))
         
         
