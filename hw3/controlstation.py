@@ -26,7 +26,6 @@ class ControlStation:
                 threading.Thread(target=self.to_dronology_thread, args=(msg,)).start()
                 time.sleep(.1)
             time.sleep(1)
-            print("still running")
             self.vehicle.send_state_message()
                     
     def to_dronology_thread(self, message):

@@ -129,7 +129,6 @@ class Copter:
             
     def create_state_message(self):
         vehicle = self.vehicle
-        print(vehicle.location.global_relative_frame.lat)
         message = {} 
         message['type'] = "state" 
         message['uavid'] = self.drone['vehicle_id']
@@ -139,7 +138,10 @@ class Copter:
         message['data']['location']['x'] = vehicle.location.global_relative_frame.lat
         message['data']['location']['y'] = vehicle.location.global_relative_frame.lon
         message['data']['location']['z'] = vehicle.location.global_relative_frame.alt
-        message['data']['attitude'] = vehicle.attitude
+        message['data']['attitude'] = {} 
+        message['data']['attitude']['x'] = vehicle.attitude.pitch
+        message['data']['attitude']['y'] = vehicle.attitude.yaw
+        message['data']['attitude']['z'] = vehicle.attitude.roll
         message['data']['velocity'] = {}
         message['data']['velocity']['x'] = vehicle.velocity[0]
         message['data']['velocity']['y'] = vehicle.velocity[1]
@@ -149,7 +151,10 @@ class Copter:
         message['data']['armed'] = vehicle.armed
         message['data']['armable'] = vehicle.is_armable
         message['data']['groundspeed'] = vehicle.groundspeed
-        message['data']['batterystatus'] = vehicle.battery
+        message['data']['batterystatus'] = {}
+        message['data']['batterystatus']['current'] = vehicle.battery.current
+        message['data']['batterystatus']['voltage'] = vehicle.battery.voltage
+        message['data']['batterystatus']['level'] = vehicle.battery.level
         return message
     
     def send_state_message(self):
