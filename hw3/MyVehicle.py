@@ -66,7 +66,7 @@ class Copter:
         vehicle = None
         baud = 57600
         status = 1
-        ardupath = drone[ardupath]
+        ardupath = drone["ardupath"]
         defaults = os.path.join(ardupath, 'Tools', 'autotest', 'default_params', 'copter.parm')
 
         home = drone[home]
@@ -82,8 +82,7 @@ class Copter:
 
             elif vehicle_type == 'VRTL':
                 sitl_args = [
-                    '-I{}'.format(str(instance)),
-                    '--model', '+',
+                    '--home', '+',
                     '--home', ','.join(map(str, home)),
                     '--rate', str(rate),
                     '--speedup', str(speedup),

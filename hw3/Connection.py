@@ -89,7 +89,7 @@ class Connection:
                 # Receive messages
                 try:
                     msg = self._sock.recv_until(os.linesep, timeout=0.1)
-                    self._msgs.put_message(cmd)  
+                    self._msgs.put_message(msg)  
                 except socket.timeout:
                     pass
                 except socket.error as e:
