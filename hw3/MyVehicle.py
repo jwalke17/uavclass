@@ -62,10 +62,10 @@ class Copter:
             time.sleep(5.0)
         
     def connect_vehicle(self):
-        threading.Thread(target=self.connect_vehicle_thread).start()
+        #threading.Thread(target=self.connect_vehicle_thread).start()
 
     
-    def connect_vehicle_thread(self):
+    #def connect_vehicle_thread(self):
         print("Entering connect thread =======================")
         drone = self.drone
         ip = self.drone['ip']
