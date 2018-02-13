@@ -113,8 +113,11 @@ class Copter:
 
         if status >= 0:
             message = {}
-            message = {"type": "handshake", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
-            message['data'] = {"home": home}
+            message['type'] = "handshake" 
+            message['uavid'] = drone['vehicle_id']
+            message['sendtimestamp'] = long(round(time.time() * 1000))
+            message['data'] = {}
+            message['data']['home'] = home
             self.to_dronology.put_message(json.dumps(message))
             
         else:
@@ -122,27 +125,27 @@ class Copter:
             
     def create_state_message(self):
         vehicle = self.vehicle
-        message = {}
-        message = {"type": "state", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
-        message['data'] = {
-            "location": {
-                "x": vehicle.location.global_relative_frame.lat,
-                "y": vehicle.location.global_relative_frame.lon,
-                "z": vehicle.location.global_relative_frame.alt
-            },
-            "attitude": vehicle.attitude,
-            "velocity": {
-                "x": vehicle.velocity[0],
-                "y": vehicle.velocity[1],
-                "z": vehicle.velocity[2]
-            },
-            "status": str(vehicle.system_status.state),
-            "mode": str(vehicle.mode.name),
-            "armed": str(vehicle.armed),
-            "armable": str(vehicle.is_armable),
-            "groundspeed": str(vehicle.groundspeed),
-            "batterystatus": vehicle.battery
-        }
+        print(vehicle.location.global_relative_frame.lat)
+        message = {} 
+        message['type'] = "state" 
+        message['uavid'] = self.drone['vehicle_id']
+        message['sendtimestamp'] = long(round(time.time() * 1000))
+        message['data'] = {}
+        message['data']['location'] = {}
+        message['data']['location']['x'] = vehicle.location.global_relative_frame.lat
+        message['data']['location']['y'] = vehicle.location.global_relative_frame.lon
+        message['data']['location']['z'] = vehicle.location.global_relative_frame.alt
+        message['data']['attitude'] = vehicle.attitude
+        message['data']['velocity'] = {}
+        message['data']['velocity']['x'] = vehicle.velocity[0]
+        message['data']['velocity']['y'] = vehicle.velocity[1]
+        message['data']['velocity']['z'] = vehicle.velocity[2]
+        message['data']['status'] = str(vehicle.system_status.state)
+        message['data']['mode'] = str(vehicle.mode.name)
+        message['data']['armed'] = vehicle.armed
+        message['data']['armable'] = vehicle.is_armable
+        message['data']['groundspeed'] = vehicle.groundspeed
+        message['data']['batterystatus'] = vehicle.battery
         return message
     
     def send_state_message(self):
