@@ -1,6 +1,7 @@
 import threading
 import MyVehicle
 import json
+import time
 
 class ControlStation:
     def __init__(self, from_dronology, to_dronology, connection, drone):
@@ -34,6 +35,7 @@ class ControlStation:
             in_msgs = self.to_dronology.get_messages()
             for msg in in_msgs:
                 threading.Thread(target=self.to_dronology_thread, args=(msg,)).start()
+            time.sleep(1)
                     
     def to_dronology_thread(self, message):
         success = self.connection.send(str(message))

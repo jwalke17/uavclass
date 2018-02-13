@@ -23,8 +23,8 @@ class Everything:
         self.connection = Connection.Connection(self.from_dronology, addr=self.addr, port=self.port, g_id=self.id)
         self.controlstation = controlstation.ControlStation(self.from_dronology, self.to_dronology, self.connection, self.drone)
         self.connection.start()
-        self.controlstation.start()
         self.controlstation.add_vehicle()
+        self.controlstation.start()
     
     
     
