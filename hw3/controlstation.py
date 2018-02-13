@@ -10,6 +10,7 @@ class ControlStation:
         self.to_dronology = to_dronology
         self.drone = drone
         self.keep_running = 1
+        self.ready_to_start = 0
         self.vehicle = None
     
     def start(self):
@@ -25,6 +26,7 @@ class ControlStation:
                 threading.Thread(target=self.to_dronology_thread, args=(msg,)).start()
                 time.sleep(.1)
             time.sleep(1)
+            print("still running")
             self.vehicle.send_state_message()
                     
     def to_dronology_thread(self, message):
@@ -35,6 +37,8 @@ class ControlStation:
     def add_vehicle(self):
         vehicle = MyVehicle.Copter(self.drone, self.to_dronology)
         vehicle.connect_vehicle()
+        while vehicle.ready == False:
+            time.sleep(.1)
         self.vehicle = vehicle
         
     def handle_message(self, msg):
