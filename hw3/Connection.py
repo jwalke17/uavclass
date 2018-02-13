@@ -1,5 +1,6 @@
 # Responsible for establishing a connection to Dronology GCS_Middleware
 import messages
+import threading
 
 class Connection:
     _WAITING = 1  
