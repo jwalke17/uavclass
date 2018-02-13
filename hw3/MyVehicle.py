@@ -1,5 +1,4 @@
 import threading
-import util
 import dronekit
 import dronekit_sitl
 from pymavlink import mavutil
@@ -123,8 +122,8 @@ class Copter:
             },
                              "attitude": vehicle.attitude,
 		"velocity": {
-            "x": vehicle.velocity[0]
-            "y": vehicle.velocity[1]
+            "x": vehicle.velocity[0],
+            "y": vehicle.velocity[1],
             "z": vehicle.velocity[2]
             },
 		"status": str(vehicle.system_status.state),
