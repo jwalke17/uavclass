@@ -66,6 +66,7 @@ class Copter:
 
     
     def connect_vehicle_thread(self):
+        print("Entering connect thread =======================")
         drone = self.drone
         ip = self.drone['ip']
         vehicle = None
@@ -125,7 +126,7 @@ class Copter:
             print("Error: connect_vehicle1")
             
         self.ready == True
-        print("exiting connect thread")
+        print("exiting connect thread +++++++++++++++++++++++++++++")
         
             
     def create_state_message(self):
