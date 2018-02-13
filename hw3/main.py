@@ -3,6 +3,7 @@ import time
 import Connection
 import messages
 import threading
+import controlstation
 
 
 class Everything:
@@ -23,7 +24,7 @@ class Everything:
         self.controlstation = controlstation.ControlStation(self.from_dronology, self.to_dronology, self.connection, self.drone)
         self.connection.start()
         self.controlstation.start()
-        self.controlstation.add_vehicle(self.drone)
+        self.controlstation.add_vehicle()
     
     
     
