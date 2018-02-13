@@ -31,11 +31,14 @@ class ControlStation:
                     self.vehicle.takeoff(msg['data']['altitude'])
                 else:
                     print("Error: no command {}".format(msg['command']))
+                time.sleep(.1)
                 
             in_msgs = self.to_dronology.get_messages()
             for msg in in_msgs:
                 threading.Thread(target=self.to_dronology_thread, args=(msg,)).start()
+                time.sleep(.1)
             time.sleep(1)
+            self.vehicle.send_state_message()
                     
     def to_dronology_thread(self, message):
         success = self.connection.send(str(message))
@@ -44,7 +47,7 @@ class ControlStation:
     
     def add_vehicle(self):
         vehicle = MyVehicle.Copter(self.drone, self.to_dronology)
-        vehicle.connect_vehicle("127.0.0.1")
+        vehicle.connect_vehicle()
         self.vehicle = vehicle
         
     

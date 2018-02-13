@@ -1,6 +1,7 @@
 import threading
 import time
 import os
+import json
 import dronekit
 import dronekit_sitl
 from pymavlink import mavutil
@@ -36,9 +37,9 @@ class Copter:
         
     def set_home(self, lat, lon, alt):
 
-        message = self._vehicle.message_factory.command_long_encode(0, 0, mavutil.mavlink.MAV_CMD_DO_SET_HOME, 0, 2, 0, 0, 0, lat, lon, alt)
-        self._vehicle.send_mavlink(message)
-        self._vehicle.flush()
+        message = self.vehicle.message_factory.command_long_encode(0, 0, mavutil.mavlink.MAV_CMD_DO_SET_HOME, 0, 2, 0, 0, 0, lat, lon, alt)
+        self.vehicle.send_mavlink(message)
+        self.vehicle.flush()
         
     def set_mode(self, mode):
         self.vehicle.mode = dronekit.VehicleMode(mode)
@@ -50,7 +51,7 @@ class Copter:
             self.vehicle.mode = dronekit.VehicleMode(mode)
             if self.drone['vehicle_type'] == 'PHYS':
                 time.sleep(5.0)
-            check_mode = self._vehicle.mode.name
+            check_mode = self.vehicle.mode.name
         
     def takeoff(self, alt):
         self.set_mode(MODE_GUIDED)
@@ -59,12 +60,13 @@ class Copter:
         if self.drone['vehicle_type'] == 'PHYS':
             time.sleep(5.0)
         
-    def connect_vehicle(self, ip='127.0.0.1'):
-        threading.Thread(target=self.connect_vehicle_thread, args=(ip,)).start()
+    def connect_vehicle(self):
+        threading.Thread(target=self.connect_vehicle_thread).start()
 
     
-    def connect_vehicle_thread(self, ip):
+    def connect_vehicle_thread(self):
         drone = self.drone
+        ip = self.drone['ip']
         vehicle = None
         baud = 57600
         status = 1
@@ -72,11 +74,10 @@ class Copter:
         defaults = os.path.join(ardupath, 'Tools', 'autotest', 'default_params', 'copter.parm')
 
         home = drone['home']
-        if home is not None:
-            if len(home) == 2:
-                home = tuple(home) + (0, 0)
-            else:
-                home = tuple(home)
+        if len(home) == 2:
+            home = tuple(home) + (0, 0)
+        else:
+            home = tuple(home)
 
         try:
             if self.drone['vehicle_type'] == 'PHYS':
@@ -84,7 +85,11 @@ class Copter:
 
             elif self.drone['vehicle_type'] == 'VRTL':
                 sitl_args = [
+                    '--model', '+',
                     '--home', ','.join(map(str, home)),
+                    '--rate', str(10),
+                    '--speedup', str(1.0),
+                    '--defaults', defaults
                 ]
                 sitl = dronekit_sitl.SITL(path=os.path.join(ardupath, 'build', 'sitl', 'bin', 'arducopter'))
                 sitl.launch(sitl_args, await_ready=True)
@@ -110,29 +115,37 @@ class Copter:
             message = {}
             message = {"type": "handshake", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
             message['data'] = {"home": home}
-            self.to_dronology.put_message(message)
+            self.to_dronology.put_message(json.dumps(message))
             
-            message = {"type": "state", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
-            message['data'] = {"location": {
+        else:
+            print("Error: connect_vehicle1")
+            
+    def create_state_message(self):
+        vehicle = self.vehicle
+        message = {}
+        message = {"type": "state", "uavid": drone['vehicle_id'], "sendtimestamp": long(round(time.time() * 1000)) }
+        message['data'] = {
+            "location": {
                 "x": vehicle.location.global_relative_frame.lat,
                 "y": vehicle.location.global_relative_frame.lon,
                 "z": vehicle.location.global_relative_frame.alt
             },
-                             "attitude": vehicle.attitude,
-		"velocity": {
-            "x": vehicle.velocity[0],
-            "y": vehicle.velocity[1],
-            "z": vehicle.velocity[2]
+            "attitude": vehicle.attitude,
+            "velocity": {
+                "x": vehicle.velocity[0],
+                "y": vehicle.velocity[1],
+                "z": vehicle.velocity[2]
             },
-		"status": str(vehicle.system_status.state),
-		"mode": str(vehicle.mode.name),
-		"armed": str(vehicle.armed),
-		"armable": str(vehicle.is_armable),
-		"groundspeed": str(vehicle.groundspeed),
-		"batterystatus": vehicle.battery
-                            }
-            self.to_dronology.put_message(message)
-        else:
-            print("Error: connect_vehicle1")
+            "status": str(vehicle.system_status.state),
+            "mode": str(vehicle.mode.name),
+            "armed": str(vehicle.armed),
+            "armable": str(vehicle.is_armable),
+            "groundspeed": str(vehicle.groundspeed),
+            "batterystatus": vehicle.battery
+        }
+        return message
+    
+    def send_state_message(self):
+        self.to_dronology.put_message(json.dumps(self.create_state_message()))
         
         
