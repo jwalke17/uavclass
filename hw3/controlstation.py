@@ -48,6 +48,8 @@ class ControlStation:
         elif msg['command'] == "setHome":
             self.vehicle.set_home(msg['data']['x'], msg['data']['y'], msg['data']['z'])
         elif msg['command'] == "setMode":
+            self.vehicle.set_mode(msg['data']['mode'])
+        elif msg['command'] == "takeoff":
             self.vehicle.takeoff(msg['data']['altitude'])
         else:
             print("Error: no command {}".format(msg['command']))
