@@ -158,6 +158,6 @@ class Copter:
         return message
     
     def send_state_message(self):
-        self.to_dronology.put_message(str(self.create_state_message()))
+        self.to_dronology.put_message(json.dumps(self.create_state_message()))
         
         
