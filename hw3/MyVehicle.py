@@ -105,7 +105,7 @@ class Copter:
                 time.sleep(3.0)
 
             time.sleep(3.0)
-                self.vehicle = vehicle
+            self.vehicle = vehicle
 
         except dronekit.APIException:
             status = -1
