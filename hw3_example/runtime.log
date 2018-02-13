@@ -1,0 +1,22 @@
+2018-02-12 23:00:21,708 | WARNING  | command.py           | line:136 | Unrecognized command: u'connectionResponse'
+2018-02-12 23:00:22,709 | DEBUG    | copter.py            | line:356 | Trying to launch SITL instance 0 on port 5760...
+2018-02-12 23:00:22,745 | DEBUG    | copter.py            | line:362 | SITL instance 0 launched on: tcp:127.0.0.1:5760
+2018-02-12 23:00:24,714 | DEBUG    | copter.py            | line:356 | Trying to launch SITL instance 1 on port 5770...
+2018-02-12 23:00:24,788 | DEBUG    | copter.py            | line:362 | SITL instance 1 launched on: tcp:127.0.0.1:5770
+2018-02-12 23:00:26,716 | DEBUG    | copter.py            | line:356 | Trying to launch SITL instance 2 on port 5780...
+2018-02-12 23:00:26,755 | DEBUG    | copter.py            | line:362 | SITL instance 2 launched on: tcp:127.0.0.1:5780
+2018-02-12 23:00:28,801 | INFO     | copter.py            | line:365 | Vehicle VRTL0 connected on tcp:127.0.0.1:5760
+2018-02-12 23:00:30,817 | INFO     | copter.py            | line:365 | Vehicle VRTL1 connected on tcp:127.0.0.1:5770
+2018-02-12 23:00:32,798 | INFO     | copter.py            | line:365 | Vehicle VRTL2 connected on tcp:127.0.0.1:5780
+2018-02-12 23:01:10,837 | INFO     | copter.py            | line:391 | Vehicle VRTL0 successfully initialized.
+2018-02-12 23:01:10,837 | WARNING  | message.py           | line:65  | [Errno 2] No such file or directory: '../cfg/sac.json'
+2018-02-12 23:01:12,845 | INFO     | copter.py            | line:391 | Vehicle VRTL1 successfully initialized.
+2018-02-12 23:01:12,845 | WARNING  | message.py           | line:65  | [Errno 2] No such file or directory: '../cfg/sac.json'
+2018-02-12 23:01:14,830 | INFO     | copter.py            | line:391 | Vehicle VRTL2 successfully initialized.
+2018-02-12 23:01:14,830 | WARNING  | message.py           | line:65  | [Errno 2] No such file or directory: '../cfg/sac.json'
+2018-02-12 23:16:18,219 | INFO     | copter.py            | line:451 | Closing vehicle VRTL1 connection.
+2018-02-12 23:16:18,234 | INFO     | copter.py            | line:455 | Closing SITL connnection for vehicle VRTL1
+2018-02-12 23:16:18,262 | INFO     | copter.py            | line:451 | Closing vehicle VRTL0 connection.
+2018-02-12 23:16:18,291 | INFO     | copter.py            | line:455 | Closing SITL connnection for vehicle VRTL0
+2018-02-12 23:16:18,302 | INFO     | copter.py            | line:451 | Closing vehicle VRTL2 connection.
+2018-02-12 23:16:18,313 | INFO     | copter.py            | line:455 | Closing SITL connnection for vehicle VRTL2
