@@ -3,6 +3,11 @@ import MyVehicle
 import json
 import time
 
+MODE_LAND = 'LAND'
+MODE_GUIDED = 'GUIDED'
+MODE_RTL = 'RTL'
+MODE_LOITER = 'LOITER'
+
 class ControlStation:
     def __init__(self, from_dronology, to_dronology, connection, drone):
         self.connection = connection

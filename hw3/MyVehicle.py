@@ -6,6 +6,11 @@ import dronekit
 import dronekit_sitl
 from pymavlink import mavutil
 
+MODE_LAND = 'LAND'
+MODE_GUIDED = 'GUIDED'
+MODE_RTL = 'RTL'
+MODE_LOITER = 'LOITER'
+
 class Copter:
     def __init__(self, drone, to_dronology):
         self.sitl = None
