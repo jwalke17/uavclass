@@ -16,8 +16,8 @@ class ControlStation:
     def start(self):
         while self.keep_running:
             in_msgs = self.from_dronology.get_messages()
-            for msg in in_msgs:
-                msg = json.load(msg)
+            for message in in_msgs:
+                msg = json.loads(message)
                 if msg['command'] == "gotoLocation":
                     self.vehicle.goto(msg['data']['x'], msg['data']['y'], msg['data']['z'])
                 elif msg['command'] == "setArmed":

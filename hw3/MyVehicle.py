@@ -1,4 +1,5 @@
 import threading
+import time
 import os
 import dronekit
 import dronekit_sitl
@@ -47,15 +48,15 @@ class Copter:
 
         while check_mode != mode:
             self.vehicle.mode = dronekit.VehicleMode(mode)
-            if self._v_type == 'PHYS':
+            if self.drone['vehicle_type'] == 'PHYS':
                 time.sleep(5.0)
             check_mode = self._vehicle.mode.name
         
     def takeoff(self, alt):
         self.set_mode(MODE_GUIDED)
         self.set_armed(armed=True)
-        self._vehicle.simple_takeoff(alt)
-        if self._v_type == 'PHYS':
+        self.vehicle.simple_takeoff(alt)
+        if self.drone['vehicle_type'] == 'PHYS':
             time.sleep(5.0)
         
     def connect_vehicle(self, ip='127.0.0.1'):
@@ -78,16 +79,12 @@ class Copter:
                 home = tuple(home)
 
         try:
-            if vehicle_type == 'PHYS':
+            if self.drone['vehicle_type'] == 'PHYS':
                 vehicle = dronekit.connect(ip, wait_ready=True, baud=baud)
 
-            elif vehicle_type == 'VRTL':
+            elif self.drone['vehicle_type'] == 'VRTL':
                 sitl_args = [
-                    '--home', '+',
                     '--home', ','.join(map(str, home)),
-                    '--rate', str(rate),
-                    '--speedup', str(speedup),
-                    '--defaults', defaults
                 ]
                 sitl = dronekit_sitl.SITL(path=os.path.join(ardupath, 'build', 'sitl', 'bin', 'arducopter'))
                 sitl.launch(sitl_args, await_ready=True)
