@@ -16,15 +16,15 @@ class ControlStation:
         while self.keep_running:
             in_msgs = self.from_dronology.get_messages()
             for msg in in_msgs:
-                if msg[command] = "gotoLocation":
+                if msg[command] == "gotoLocation":
                     self.vehicle.goto(msg[data][x], msg[data][y], msg[data][z])
-                elif msg[command] = "setArmed":
+                elif msg[command] == "setArmed":
                     self.vehicle.set_armed(msg[data][armed])
-                elif msg[command] = "setGroundspeed":
+                elif msg[command] == "setGroundspeed":
                     self.vehicle.set_groundspeed(msg[data][speed])
-                elif msg[command] = "setHome":
+                elif msg[command] == "setHome":
                     self.vehicle.set_home(msg[data][x], msg[data][y], msg[data][z])
-                elif msg[command] = "setMode":
+                elif msg[command] == "setMode":
                     self.vehicle.takeoff(msg[data][altitude])
                 else:
                     print("Error: no command {}".format(msg[command]))
