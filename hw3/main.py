@@ -9,12 +9,7 @@ class Everything:
         self.port = 1234
         self.addr = 'localhost'
         self.id = "default_groundstation"
-        self.drone = {
-            "ardupath": "/home/jwalke17/git/ardupilot" 
-            "vehicle_type": "VRTL",
-            "vehicle_id": "ND-1",     
-            "home": [41.697947, -86.233919]
-                     }
+        self.drone = {"ardupath": "/home/jwalke17/git/ardupilot", "vehicle_type": "VRTL", "vehicle_id": "ND-1","home": [41.697947, -86.233919]}
         self.connection = None
         self.controlstation = None
         self.from_dronology = messages.Messages()
