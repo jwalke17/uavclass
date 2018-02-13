@@ -70,7 +70,7 @@ class Copter:
         ardupath = drone["ardupath"]
         defaults = os.path.join(ardupath, 'Tools', 'autotest', 'default_params', 'copter.parm')
 
-        home = drone[home]
+        home = drone['home']
         if home is not None:
             if len(home) == 2:
                 home = tuple(home) + (0, 0)
