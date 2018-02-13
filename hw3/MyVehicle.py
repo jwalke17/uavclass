@@ -125,6 +125,7 @@ class Copter:
             print("Error: connect_vehicle1")
             
         self.ready == True
+        print("exiting connect thread")
         
             
     def create_state_message(self):
