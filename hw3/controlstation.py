@@ -18,7 +18,7 @@ class ControlStation:
             in_msgs = self.from_dronology.get_messages()
             for message in in_msgs:
                 msg = json.loads(message)
-                threading.Thread(target=handle_message, args=(msg,)).start()
+                threading.Thread(target=self.handle_message, args=(msg,)).start()
                 time.sleep(.1)
                 
             in_msgs = self.to_dronology.get_messages()
