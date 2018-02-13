@@ -118,8 +118,11 @@ class Copter:
             message['uavid'] = drone['vehicle_id']
             message['sendtimestamp'] = long(round(time.time() * 1000))
             message['data'] = {}
-            message['data']['home'] = home
-            self.to_dronology.put_message(str(message))
+            message['data']['home'] = {}
+            message['data']['home']['x'] = home[0]
+            message['data']['home']['y'] = home[1]
+            message['data']['home']['z'] = home[2]
+            self.to_dronology.put_message(json.dumps(message))
             
         else:
             print("Error: connect_vehicle1")
