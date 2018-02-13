@@ -37,9 +37,6 @@ class ControlStation:
     def add_vehicle(self):
         vehicle = MyVehicle.Copter(self.drone, self.to_dronology)
         vehicle.connect_vehicle()
-        while vehicle.ready == False:
-            print("vehicle.ready == {}".format(vehicle.ready))
-            time.sleep(.1)
         self.vehicle = vehicle
         
     def handle_message(self, msg):

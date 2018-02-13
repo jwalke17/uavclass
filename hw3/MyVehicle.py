@@ -12,7 +12,6 @@ class Copter:
         self.vehicle = None
         self.drone = drone
         self.to_dronology = to_dronology
-        self.ready = False
     
     def goto(self, lat, lon, alt):
         self.vehicle.simple_goto(dronekit.LocationGlobalRelative(lat, lon, alt))
@@ -125,7 +124,6 @@ class Copter:
         else:
             print("Error: connect_vehicle1")
             
-        self.ready == True
         print("exiting connect thread +++++++++++++++++++++++++++++")
         
             
